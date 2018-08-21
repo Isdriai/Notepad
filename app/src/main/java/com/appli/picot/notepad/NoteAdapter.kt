@@ -1,15 +1,16 @@
 package com.appli.picot.notepad
 
-import android.content.Context
+import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class NoteAdapter (val notes: ArrayList<Note>, val context: Context) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter (val notes: ArrayList<Note>, val itemClickListener: View.OnClickListener) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+        val cardview = itemView.findViewById<CardView>(R.id.cardview)
         val titre = itemView.findViewById<TextView>(R.id.title_item_list_note)
         val texte = itemView.findViewById<TextView>(R.id.text_item_list_note)
     }
@@ -28,5 +29,7 @@ class NoteAdapter (val notes: ArrayList<Note>, val context: Context) : RecyclerV
         val note = notes[position]
         holder.titre.text = note.titre
         holder.texte.text = note.texte
+        holder.cardview.tag = position
+        holder.cardview.setOnClickListener(itemClickListener)
     }
 }

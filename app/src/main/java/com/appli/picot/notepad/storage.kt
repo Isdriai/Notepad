@@ -15,4 +15,5 @@ fun readNotes(listNotes: kotlin.collections.ArrayList<Note>){
 }
 
 fun writeNote(note: Note){
+    print("J'écris la note dont le titre est ${note.titre} \n")
 }
