@@ -28,7 +28,7 @@ class NoteAdapter (val notes: ArrayList<Note>, val itemClickListener: View.OnCli
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = notes[position]
         holder.titre.text = note.titre
-        holder.texte.text = note.texte
+        holder.texte.text = note.corps
         holder.cardview.tag = position
         holder.cardview.setOnClickListener(itemClickListener)
     }

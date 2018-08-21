@@ -3,7 +3,7 @@ package com.appli.picot.notepad
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Note (val titre: String, val texte:String): Parcelable {
+data class Note (val titre: String, val corps:String): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString()) {
@@ -11,7 +11,7 @@ data class Note (val titre: String, val texte:String): Parcelable {
 
     override fun writeToParcel(dest: Parcel?, flags: Int) {
         dest?.writeString(titre)
-        dest?.writeString(texte)
+        dest?.writeString(corps)
     }
 
     override fun describeContents(): Int {
