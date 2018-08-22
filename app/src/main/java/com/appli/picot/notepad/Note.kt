@@ -3,7 +3,7 @@ package com.appli.picot.notepad
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Note (val titre: String, val corps:String): Parcelable {
+data class Note (var titre: String, var corps:String): Parcelable {
     constructor(parcel: Parcel) : this(
             parcel.readString(),
             parcel.readString()) {

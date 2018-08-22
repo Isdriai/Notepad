@@ -12,6 +12,11 @@ fun readNotes(listNotes: kotlin.collections.ArrayList<Note>){
     listNotes.add(Note("titre8", "voici du texte"))
     listNotes.add(Note("titre9", "voici du texte"))
     listNotes.add(Note("titre10", "voici du texte"))
+    listNotes.add(Note("titre11", "voici du texte"))
+    listNotes.add(Note("titre12", "voici du texte"))
+    listNotes.add(Note("titre13", "voici du texte"))
+    listNotes.add(Note("titre14", "voici du texte"))
+    listNotes.add(Note("titre15", "voici du texte"))
 }
 
 fun writeNote(note: Note){
