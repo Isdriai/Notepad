@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -28,6 +29,21 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         val listNote = findViewById<RecyclerView>(R.id.listNote)
         listNote.layoutManager = LinearLayoutManager(this)
         listNote.adapter = adapter
+
+        val fab = findViewById<FloatingActionButton>(R.id.fab)
+        fab.setOnClickListener {
+            val index = notes.size
+            val note = Note("","")
+            notes.add(index, note)
+            launchDetailActivity(index, note)
+        }
+    }
+
+    private fun launchDetailActivity(index: Int, note: Note){
+        val intent = Intent(this, NoteDetailActivity::class.java)
+        intent.putExtra(NoteDetailActivity.NOTE, note)
+        intent.putExtra(NoteDetailActivity.INDEX, index)
+        startActivityForResult(intent, NoteDetailActivity.REQUEST)
     }
 
     override fun onClick(view: View?) {
@@ -35,10 +51,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
             val index = view.tag as Int
             val note = notes[index]
             Log.i(TAG, note.toString())
-            val intent = Intent(this, NoteDetailActivity::class.java)
-            intent.putExtra(NoteDetailActivity.NOTE, note)
-            intent.putExtra(NoteDetailActivity.INDEX, index)
-            startActivityForResult(intent, NoteDetailActivity.REQUEST)
+            launchDetailActivity(index, note)
         }
     }
 
@@ -57,10 +70,6 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         val noteIndex = data.getIntExtra(NoteDetailActivity.INDEX, -1)
         val note = data.getParcelableExtra<Note>(NoteDetailActivity.NOTE)
         notes[noteIndex] = note
-        Log.i(TAG, notes.toString())
-        Log.i(TAG+"adaptater", adapter.notes.toString())
-        Log.i(TAG, noteIndex.toString())
         adapter.notifyItemChanged(noteIndex)
     }
-
 }
