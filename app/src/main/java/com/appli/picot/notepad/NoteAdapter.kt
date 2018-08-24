@@ -6,8 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import java.util.*
 
-class NoteAdapter (val notes: List<Note>, val itemClickListener: View.OnClickListener) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
+class NoteAdapter (val notes: TreeMap<Int, Note>, val itemClickListener: View.OnClickListener) : RecyclerView.Adapter<NoteAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val cardview = itemView.findViewById<CardView>(R.id.cardview)
@@ -27,8 +28,8 @@ class NoteAdapter (val notes: List<Note>, val itemClickListener: View.OnClickLis
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val note = notes[position]
-        holder.titre.text = note.titre
-        holder.texte.text = note.corps
+        holder.titre.text = note?.titre
+        holder.texte.text = note?.corps
         holder.cardview.tag = position
         holder.cardview.setOnClickListener(itemClickListener)
     }

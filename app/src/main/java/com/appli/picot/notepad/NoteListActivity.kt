@@ -4,15 +4,17 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import java.util.*
 
 class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
-    val notes = arrayListOf<Note>()
+    val notes = TreeMap<Int, Note>()
 
     val adapter = NoteAdapter(notes, this)
 
@@ -22,7 +24,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_list)
 
-        readNotes(notes)
+        readNotes(notes, this)
 
         Log.i(TAG, notes.toString())
 
@@ -32,26 +34,29 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
 
         val fab = findViewById<FloatingActionButton>(R.id.fab)
         fab.setOnClickListener {
-            val index = notes.size
-            val note = Note("","")
-            notes.add(index, note)
-            launchDetailActivity(index, note)
+            var id = 0
+            try {
+                id = notes.lastKey()+1
+            } catch (e: NoSuchElementException) {}
+            val note = Note("","", id)
+            notes[id] = note
+            launchDetailActivity(id, note)
         }
     }
 
-    private fun launchDetailActivity(index: Int, note: Note){
+    private fun launchDetailActivity(id: Int, note: Note?){
         val intent = Intent(this, NoteDetailActivity::class.java)
-        intent.putExtra(NoteDetailActivity.NOTE, note)
-        intent.putExtra(NoteDetailActivity.INDEX, index)
+        intent.putExtra(NoteDetailActivity.NOTE, note as Parcelable)
+        intent.putExtra(NoteDetailActivity.INDEX, id)
         startActivityForResult(intent, NoteDetailActivity.REQUEST)
     }
 
     override fun onClick(view: View?) {
         if ( view?.tag != null) {
-            val index = view.tag as Int
-            val note = notes[index]
-            Log.i(TAG, note.toString())
-            launchDetailActivity(index, note)
+            val id = view.tag as Int
+            val note = notes[id]
+            Log.i(TAG, note?.toString())
+            launchDetailActivity(id, note)
         }
     }
 
@@ -70,6 +75,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
         val noteIndex = data.getIntExtra(NoteDetailActivity.INDEX, -1)
         val note = data.getParcelableExtra<Note>(NoteDetailActivity.NOTE)
         notes[noteIndex] = note
+        writeNote(note, this)
         adapter.notifyItemChanged(noteIndex)
     }
 }

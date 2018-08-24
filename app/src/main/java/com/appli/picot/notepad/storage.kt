@@ -1,24 +1,35 @@
 package com.appli.picot.notepad
 
-fun readNotes(listNotes: kotlin.collections.ArrayList<Note>){
-    listNotes.add(Note("titre", "voici du texte"))
-    listNotes.add(Note("titre1", "voici du texte"))
-    listNotes.add(Note("titre2", "voici du texte"))
-    listNotes.add(Note("titre3", "voici du texte"))
-    listNotes.add(Note("titre4", "voici du texte"))
-    listNotes.add(Note("titre5", "voici du texte"))
-    listNotes.add(Note("titre6", "voici du texte"))
-    listNotes.add(Note("titre7", "voici du texte"))
-    listNotes.add(Note("titre8", "voici du texte"))
-    listNotes.add(Note("titre9", "voici du texte"))
-    listNotes.add(Note("titre10", "voici du texte"))
-    listNotes.add(Note("titre11", "voici du texte"))
-    listNotes.add(Note("titre12", "voici du texte"))
-    listNotes.add(Note("titre13", "voici du texte"))
-    listNotes.add(Note("titre14", "voici du texte"))
-    listNotes.add(Note("titre15", "voici du texte"))
+import android.content.Context
+import android.util.Log
+import java.io.*
+import java.lang.System.out
+import java.util.*
+
+val NOTE = "Note"
+val EXT = ".txt"
+
+val TAG = "storage"
+
+fun readNotes(listNotes: TreeMap<Int, Note>, context: Context){
+    val dir = context.filesDir
+   for (file in dir.listFiles()) {
+        if (file.isFile and (NOTE in file.name) and (EXT in file.name)) {
+            val id = file.name.replace(NOTE, "").replace(EXT, "")
+            val out = ObjectInputStream(file.inputStream())
+            val note = out.readObject() as Note
+            Log.i(TAG, id)
+            listNotes[id.toInt()] = note
+        }
+    }
 }
 
-fun writeNote(note: Note){
-    print("J'écris la note dont le titre est ${note.titre} \n")
+fun writeNote(note: Note, context: Context){
+    val dir = File(context.filesDir, NOTE + note.id.toString() + EXT) // ex: "Note10.txt"
+    val out = ObjectOutputStream(dir.outputStream())
+    out.writeObject(note)
+}
+
+fun eraseNote(note: Note, context: Context){
+
 }
