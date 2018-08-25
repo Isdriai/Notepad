@@ -40,14 +40,13 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
             } catch (e: NoSuchElementException) {}
             val note = Note("","", id)
             notes[id] = note
-            launchDetailActivity(id, note)
+            launchDetailActivity(note)
         }
     }
 
-    private fun launchDetailActivity(id: Int, note: Note?){
+    private fun launchDetailActivity(note: Note?){
         val intent = Intent(this, NoteDetailActivity::class.java)
         intent.putExtra(NoteDetailActivity.NOTE, note as Parcelable)
-        intent.putExtra(NoteDetailActivity.INDEX, id)
         startActivityForResult(intent, NoteDetailActivity.REQUEST)
     }
 
@@ -56,7 +55,7 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
             val id = view.tag as Int
             val note = notes[id]
             Log.i(TAG, note?.toString())
-            launchDetailActivity(id, note)
+            launchDetailActivity(note)
         }
     }
 
@@ -72,10 +71,20 @@ class NoteListActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun updateNotes(data: Intent){
-        val noteIndex = data.getIntExtra(NoteDetailActivity.INDEX, -1)
         val note = data.getParcelableExtra<Note>(NoteDetailActivity.NOTE)
-        notes[noteIndex] = note
-        writeNote(note, this)
-        adapter.notifyItemChanged(noteIndex)
+        when(data.action){
+            NoteDetailActivity.REQUEST_ADD -> {
+
+                notes[note.id] = note
+                writeNote(note, this)
+            }
+            NoteDetailActivity.REQUEST_DELETE -> {
+                if (notes.containsKey(note.id)){
+                    notes.remove(note.id)
+                    removeNote(note, this)
+                }
+            }
+        }
+        adapter.notifyItemChanged(note.id)
     }
 }

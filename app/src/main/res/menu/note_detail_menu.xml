@@ -8,4 +8,10 @@
         app:showAsAction="always"
         android:icon="@drawable/pioche"/>
 
+    <item
+        android:id="@+id/delete"
+        android:title="supprimer"
+        app:showAsAction="always"
+        android:icon="@drawable/epee" />
+
 </menu>

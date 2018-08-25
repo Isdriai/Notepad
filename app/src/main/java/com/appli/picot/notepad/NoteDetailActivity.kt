@@ -15,8 +15,6 @@ class NoteDetailActivity : AppCompatActivity() {
 
     val TAG = NoteDetailActivity::class.java.simpleName
 
-    var indexNote = -1
-
     lateinit var note: Note
 
     lateinit var texte: TextView
@@ -25,17 +23,18 @@ class NoteDetailActivity : AppCompatActivity() {
     companion object {
         val REQUEST = 1
         val NOTE = "note"
-        val INDEX = "index"
+
+        val REQUEST_ADD = "add"
+        val REQUEST_DELETE = "delete"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_note_detail)
 
-        note = intent.getParcelableExtra<Note>(NOTE)
-        indexNote = intent.getIntExtra(INDEX, indexNote)
-        texte = findViewById<TextView>(R.id.text_detail_note)
-        titre = findViewById<TextView>(R.id.title_detail_note)
+        note = intent.getParcelableExtra(NOTE)
+        texte = findViewById(R.id.text_detail_note)
+        titre = findViewById(R.id.title_detail_note)
 
         texte.text = note.corps
         titre.text = note.titre
@@ -53,9 +52,15 @@ class NoteDetailActivity : AppCompatActivity() {
                 note.titre = titre.text.toString()
                 note.corps = texte.text.toString()
 
-                intent = Intent()
+                intent = Intent(REQUEST_ADD)
                 intent.putExtra(NOTE, note as Parcelable)
-                intent.putExtra(INDEX, indexNote)
+                setResult(Activity.RESULT_OK, intent)
+                finish()
+                return true
+            }
+            R.id.delete -> {
+                intent = Intent(REQUEST_DELETE)
+                intent.putExtra(NOTE, note as Parcelable)
                 setResult(Activity.RESULT_OK, intent)
                 finish()
                 return true
